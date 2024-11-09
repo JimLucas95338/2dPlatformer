@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Platform Game</title>
+    <style>
+        canvas {
+            border: 2px solid black;
+            background: #87CEEB;  /* Light blue background */
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+         // Step 1: Create the player object
+         const player = {
+            x: 50, //starting x position
+            y: 200, //starting y position
+            width: 40, //player width
+            height: 40, //player height
+            speed: 5, //player speed
+            color: '#FF5722', //player color (orange)
+         };
+         
+         // Step 2 Create control tracking object
+         const keys = {
+            right: false,
+            left: false
+         };
+
+         // Step 3 Add keyboard listeners
+         document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') keys.right = true;
+            if (e.key === 'ArrowLeft') keys.left = true;
+        });
+
+        document.addEventListener('keyup', (e) =>{
+            if (e.key === 'ArrowRight') keys.right = false;
+            if (e.key === 'ArrowLeft') keys.left = false;
+        });
+
+        // Step 4: Create update function for game logic
+        function update() {
+            // Update player position based on key presses
+            if (keys.right) player.x += player.speed;
+            if (keys.left) player.x -= player.speed;
+
+            // Keep player within bounds
+            if (player.x < 0) player.x =0;
+            if (player.x + player.width > canvas.width) {
+                player.x = canvas.width - player.width;
+            }
+
+        }
+
+        // Step 5: Create draw function
+        function draw() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the player
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        // Step 6: Create game loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        gameLoop();
+    </script>
+</body>
+</html>
