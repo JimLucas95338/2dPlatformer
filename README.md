@@ -6,7 +6,7 @@
 
 A modern, responsive platformer game built with vanilla JavaScript and HTML5 Canvas.
 
-[Play Demo](https://yourusername.github.io/platform-game) | [Report Bug](https://github.com/yourusername/platform-game/issues) | [Request Feature](https://github.com/yourusername/platform-game/issues)
+[Play Demo](https://JimLucas95338.github.io/2dPlatformer) | [Report Bug](https://github.com/JimLucas95338/2dPlatformer/issues) | [Request Feature](https://github.com/JimLucas95338/2dPlatformer/issues)
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -66,12 +66,12 @@ This 2D platformer game is a passion project designed to demonstrate core game d
 
 1. **Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/platform-game.git
+git clone https://github.com/JimLucas95338/2dPlatformer.git
 ```
 
 2. **Navigate to Project Directory**
 ```bash
-cd platform-game
+cd 2dPlatformer
 ```
 
 3. **Launch the Game**
@@ -121,7 +121,7 @@ function gameLoop() {
 
 ### Project Structure
 ```
-platform-game/
+2dPlatformer/
 │
 ├── assets/                 # Game assets
 │   ├── images/            # Sprites and images
@@ -195,7 +195,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📫 Contact
 
-Your Name - Jim Lucas
+Jim Lucas - [@JimLucas95338](https://github.com/JimLucas95338)
 
 Project Link: [https://github.com/JimLucas95338/2dPlatformer](https://github.com/JimLucas95338/2dPlatformer)
 
@@ -208,19 +208,19 @@ Project Link: [https://github.com/JimLucas95338/2dPlatformer](https://github.com
 ---
 
 <div align="center">
-Made with ❤️ by [Your Name]
+Made with ❤️ by Jim Lucas
 
 Don't forget to give the project a star ⭐ if you like it!
 </div>
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[contributors-shield]: https://img.shields.io/github/contributors/yourusername/platform-game.svg?style=for-the-badge
-[contributors-url]: https://github.com/yourusername/platform-game/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/yourusername/platform-game.svg?style=for-the-badge
-[forks-url]: https://github.com/yourusername/platform-game/network/members
-[stars-shield]: https://img.shields.io/github/stars/yourusername/platform-game.svg?style=for-the-badge
-[stars-url]: https://github.com/yourusername/platform-game/stargazers
-[issues-shield]: https://img.shields.io/github/issues/yourusername/platform-game.svg?style=for-the-badge
-[issues-url]: https://github.com/yourusername/platform-game/issues
-[license-shield]: https://img.shields.io/github/license/yourusername/platform-game.svg?style=for-the-badge
-[license-url]: https://github.com/yourusername/platform-game/blob/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/JimLucas95338/2dPlatformer.svg?style=for-the-badge
+[contributors-url]: https://github.com/JimLucas95338/2dPlatformer/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/JimLucas95338/2dPlatformer.svg?style=for-the-badge
+[forks-url]: https://github.com/JimLucas95338/2dPlatformer/network/members
+[stars-shield]: https://img.shields.io/github/stars/JimLucas95338/2dPlatformer.svg?style=for-the-badge
+[stars-url]: https://github.com/JimLucas95338/2dPlatformer/stargazers
+[issues-shield]: https://img.shields.io/github/issues/JimLucas95338/2dPlatformer.svg?style=for-the-badge
+[issues-url]: https://github.com/JimLucas95338/2dPlatformer/issues
+[license-shield]: https://img.shields.io/github/license/JimLucas95338/2dPlatformer.svg?style=for-the-badge
+[license-url]: https://github.com/JimLucas95338/2dPlatformer/blob/master/LICENSE
