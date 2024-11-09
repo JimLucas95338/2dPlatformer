@@ -5,7 +5,7 @@
     <style>
         canvas {
             border: 2px solid black;
-            background: #87CEEB;  /* Light blue background */
+            background: #87CEEB;
         }
         body {
             display: flex;
@@ -23,65 +23,188 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-         // Step 1: Create the player object
-         const player = {
-            x: 50, //starting x position
-            y: 200, //starting y position
-            width: 40, //player width
-            height: 40, //player height
-            speed: 5, //player speed
-            color: '#FF5722', //player color (orange)
-         };
-         
-         // Step 2 Create control tracking object
-         const keys = {
-            right: false,
-            left: false
-         };
+        // Player object with physics properties
+        const player = {
+            x: 50,
+            y: 200,
+            width: 40,
+            height: 40,
+            speed: 5,
+            color: '#FF5722',
+            velocityY: 0,
+            velocityX: 0,    // Added for smoother movement
+            gravity: 0.5,
+            jumpForce: 12,
+            isJumping: false,
+            friction: 0.8     // Added to smooth out movement
+        };
 
-         // Step 3 Add keyboard listeners
-         document.addEventListener('keydown', (e) => {
+        // Define platforms array
+        const platforms = [
+            { x: 0, y: 350, width: 800, height: 20, color: '#4CAF50' },     // Ground
+            { x: 300, y: 250, width: 200, height: 20, color: '#4CAF50' },   // Platform 1
+            { x: 100, y: 150, width: 200, height: 20, color: '#4CAF50' },   // Platform 2
+            { x: 500, y: 100, width: 200, height: 20, color: '#4CAF50' }    // Platform 3
+        ];
+         
+        const keys = {
+            right: false,
+            left: false,
+            up: false
+        };
+
+        document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') keys.right = true;
             if (e.key === 'ArrowLeft') keys.left = true;
+            if (e.key === 'ArrowUp') keys.up = true;
         });
 
-        document.addEventListener('keyup', (e) =>{
+        document.addEventListener('keyup', (e) => {
             if (e.key === 'ArrowRight') keys.right = false;
             if (e.key === 'ArrowLeft') keys.left = false;
+            if (e.key === 'ArrowUp') keys.up = false;
         });
 
-        // Step 4: Create update function for game logic
-        function update() {
-            // Update player position based on key presses
-            if (keys.right) player.x += player.speed;
-            if (keys.left) player.x -= player.speed;
+        // Enhanced collision detection function
+        function checkCollision(player, platform) {
+            // Get the sides of both rectangles
+            const playerLeft = player.x;
+            const playerRight = player.x + player.width;
+            const playerTop = player.y;
+            const playerBottom = player.y + player.height;
 
-            // Keep player within bounds
-            if (player.x < 0) player.x =0;
-            if (player.x + player.width > canvas.width) {
-                player.x = canvas.width - player.width;
-            }
+            const platformLeft = platform.x;
+            const platformRight = platform.x + platform.width;
+            const platformTop = platform.y;
+            const platformBottom = platform.y + platform.height;
 
+            // Basic collision check
+            return playerLeft < platformRight &&
+                   playerRight > platformLeft &&
+                   playerTop < platformBottom &&
+                   playerBottom > platformTop;
         }
 
-        // Step 5: Create draw function
-        function draw() {
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Handle collision response
+        function handleCollision(player, platform) {
+            const playerLeft = player.x;
+            const playerRight = player.x + player.width;
+            const playerTop = player.y;
+            const playerBottom = player.y + player.height;
 
-            // Draw the player
+            const platformLeft = platform.x;
+            const platformRight = platform.x + platform.width;
+            const platformTop = platform.y;
+            const platformBottom = platform.y + platform.height;
+
+            // Calculate overlap on each side
+            const bottomOverlap = playerBottom - platformTop;
+            const topOverlap = platformBottom - playerTop;
+            const leftOverlap = platformRight - playerLeft;
+            const rightOverlap = playerRight - platformLeft;
+
+            // Find the smallest overlap
+            const minOverlap = Math.min(bottomOverlap, topOverlap, leftOverlap, rightOverlap);
+
+            // Resolve collision based on smallest overlap
+            if (minOverlap === bottomOverlap && player.velocityY >= 0) {
+                // Landing on top of platform
+                player.y = platformTop - player.height;
+                player.velocityY = 0;
+                player.isJumping = false;
+                return true;
+            } else if (minOverlap === topOverlap && player.velocityY < 0) {
+                // Hitting platform from below
+                player.y = platformBottom;
+                player.velocityY = 0;
+                return false;
+            } else if (minOverlap === leftOverlap) {
+                // Hitting platform from the left
+                player.x = platformRight;
+                player.velocityX = 0;
+                return false;
+            } else if (minOverlap === rightOverlap) {
+                // Hitting platform from the right
+                player.x = platformLeft - player.width;
+                player.velocityX = 0;
+                return false;
+            }
+            return false;
+        }
+
+        function update() {
+            // Handle horizontal movement with acceleration
+            if (keys.right) {
+                player.velocityX += 0.5;
+                if (player.velocityX > player.speed) player.velocityX = player.speed;
+            } else if (keys.left) {
+                player.velocityX -= 0.5;
+                if (player.velocityX < -player.speed) player.velocityX = -player.speed;
+            } else {
+                // Apply friction when not moving
+                player.velocityX *= player.friction;
+            }
+
+            // Update horizontal position
+            player.x += player.velocityX;
+
+            // Apply gravity
+            player.velocityY += player.gravity;
+            player.y += player.velocityY;
+
+            // Check platform collisions
+            let onPlatform = false;
+            platforms.forEach(platform => {
+                if (checkCollision(player, platform)) {
+                    onPlatform = handleCollision(player, platform) || onPlatform;
+                }
+            });
+
+            // Handle jumping
+            if (keys.up && !player.isJumping && onPlatform) {
+                player.velocityY = -player.jumpForce;
+                player.isJumping = true;
+            }
+
+            // Keep player in bounds
+            if (player.x < 0) {
+                player.x = 0;
+                player.velocityX = 0;
+            }
+            if (player.x + player.width > canvas.width) {
+                player.x = canvas.width - player.width;
+                player.velocityX = 0;
+            }
+
+            // Reset if player falls off
+            if (player.y > canvas.height) {
+                player.x = 50;
+                player.y = 200;
+                player.velocityY = 0;
+                player.velocityX = 0;
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw platforms
+            platforms.forEach(platform => {
+                ctx.fillStyle = platform.color;
+                ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+            });
+
+            // Draw player
             ctx.fillStyle = player.color;
             ctx.fillRect(player.x, player.y, player.width, player.height);
         }
 
-        // Step 6: Create game loop
         function gameLoop() {
             update();
             draw();
             requestAnimationFrame(gameLoop);
         }
 
-        // Start the game
         gameLoop();
     </script>
 </body>
