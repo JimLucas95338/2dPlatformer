@@ -34,11 +34,12 @@ A modern, responsive platformer game built with vanilla JavaScript and HTML5 Can
 ## 🎯 About The Project
 
 ### What Makes This Game Special
-This 2D platformer game is a passion project designed to demonstrate core game development concepts while providing an engaging gaming experience. It's built with a focus on:
+This 2D platformer game showcases fundamental game development concepts while providing an engaging gaming experience. Built with a focus on:
 
 - Clean, maintainable code architecture
-- Smooth, responsive controls
-- Physics-based gameplay mechanics
+- Smooth, physics-based movement
+- Precise collision detection
+- Responsive controls
 - Expandable game engine design
 
 ### Built With
@@ -48,17 +49,18 @@ This 2D platformer game is a passion project designed to demonstrate core game d
 - 📱 Responsive design principles
 
 ### Key Features
-- ⚡ Smooth, lag-free gameplay
-- 🎮 Intuitive controls
-- 🌟 Collision detection system
-- 🎨 Clean visual design
+Current implementation includes:
+- ⚡ Smooth player movement with acceleration and friction
+- 🎮 Precise platform collisions from all directions
+- 🌟 Physics-based jumping mechanics
+- 🎨 Multiple platforms at different heights
 - 🔄 Efficient game loop
 - 📱 Cross-browser compatibility
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Any modern web browser
+- Any modern web browser (Chrome, Firefox, Safari, Edge)
 - Basic understanding of HTML/JavaScript (for development)
 - Local development server (optional)
 
@@ -93,72 +95,84 @@ npx serve
 | ← | Move Left |
 | → | Move Right |
 | ↑ | Jump |
-| Space | Action (Future Use) |
 
-### Game Rules
-- Jump between platforms to explore
-- Avoid falling off the screen
-- Master the momentum and physics
+### Game Mechanics
+- Use arrow keys to move left and right
+- Jump between platforms with the up arrow
+- Movement features acceleration and friction for smooth control
+- Collide with platforms from all sides
+- Fall off a platform and you'll return to the start
 
 ## 🏗 Game Architecture
 
 ### Core Components
 
-#### Game Loop System
+#### Physics System
 ```javascript
-function gameLoop() {
-    update();
-    draw();
-    requestAnimationFrame(gameLoop);
-}
+// Physics properties
+const physics = {
+    gravity: 0.5,
+    friction: 0.8,
+    jumpForce: 12
+};
+
+// Movement update example
+player.velocityY += gravity;
+player.y += player.velocityY;
+player.velocityX *= friction;
 ```
 
-#### Physics Engine
-- Gravity simulation
-- Velocity-based movement
-- Collision detection
-- Jump mechanics
+#### Collision System
+```javascript
+// Collision detection with platforms
+function checkCollision(player, platform) {
+    return player.x < platform.x + platform.width &&
+           player.x + player.width > platform.x &&
+           player.y < platform.y + platform.height &&
+           player.y + player.height > platform.y;
+}
+```
 
 ### Project Structure
 ```
 2dPlatformer/
 │
-├── assets/                 # Game assets
-│   ├── images/            # Sprites and images
-│   ├── sounds/            # Sound effects and music
-│   └── styles/            # CSS files
+├── index.html            # Main game file
+│   ├── Player Logic     # Player movement and physics
+│   ├── Platform Logic   # Platform creation and collision
+│   └── Game Loop       # Main update and render cycle
 │
-├── src/                   # Source files
-│   ├── engine/            # Game engine components
-│   ├── entities/          # Game entities
-│   └── utils/             # Utility functions
-│
-├── index.html            # Main HTML file
-├── README.md             # Documentation
-└── LICENSE              # MIT license
+├── README.md            # Documentation
+└── LICENSE             # MIT license
 ```
 
 ## 📌 Roadmap
 
-### Phase 1 - Core Mechanics
+### Phase 1 - Core Mechanics ✓
 - [x] Basic player movement
 - [x] Jumping physics
 - [x] Ground collision
-- [ ] Platform collision
+- [x] Platform collision
+- [x] Smooth movement with acceleration
+- [x] Multiple platforms
 
 ### Phase 2 - Enhanced Gameplay
-- [ ] Multiple platforms
+- [ ] Moving platforms
 - [ ] Double jump ability
-- [ ] Wall jumping
+- [ ] Wall sliding/jumping
 - [ ] Sprint ability
+- [ ] Variable jump heights
 
 ### Phase 3 - Content
 - [ ] Multiple levels
 - [ ] Collectibles
 - [ ] Enemies
 - [ ] Power-ups
+- [ ] Score system
 
 ### Phase 4 - Polish
+- [ ] Character sprites
+- [ ] Animation system
 - [ ] Sound effects
 - [ ] Background music
 - [ ] Particle effects
@@ -166,7 +180,7 @@ function gameLoop() {
 
 ## 🤝 Contributing
 
-We love contributions! Here's how you can help:
+We welcome contributions! Here's how you can help:
 
 1. **Fork** the Project
 2. **Create** your Feature Branch
